@@ -1,0 +1,45 @@
+# Document: http://goreleaser.com
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - env:
+    - CGO_ENABLED=0
+    main: .
+    ldflags: -s -w -X main.version={{.Version}}
+
+archives:
+  - id: main
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    files:
+      - LICENSE
+      - README.md
+
+brews:
+  - github:
+      owner: haya14busa
+      name: homebrew-tap
+    folder: Formula
+    homepage:  https://github.com/haya14busa/bump
+    description: bump returns next semantic version tag.
+    test: |
+      system "#{bin}/bump -h"
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
