@@ -30,7 +30,15 @@ func main() {
 	}
 }
 
+func usage() {
+	fmt.Fprintln(os.Stderr, `Usage:	bump [major,minor,patch (default=patch)]
+bump returns next semantic version tag`)
+	fmt.Fprintln(os.Stderr, "https://github.com/haya14busa/bump")
+	os.Exit(2)
+}
+
 func run(w io.Writer) error {
+	flag.Usage = usage
 	flag.Parse()
 	ctx := context.Background()
 	tags, err := tags(ctx)
