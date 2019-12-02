@@ -48,13 +48,21 @@ func run(w io.Writer) error {
 	if len(tags) == 0 {
 		return errors.New("existing tag not found")
 	}
-	latest, err := semver.NewVersion(latestSemVer(tags))
+	next, err := nextTag(tags, bumpLevel(flag.Args()))
 	if err != nil {
 		return err
 	}
-	next := nextSemVer(latest, bumpLevel(flag.Args()))
-	fmt.Fprintln(w, next.Original())
+	fmt.Fprintln(w, next)
 	return nil
+}
+
+func nextTag(tags []string, level Level) (string, error) {
+	latest, err := semver.NewVersion(latestSemVer(tags))
+	if err != nil {
+		return "", err
+	}
+	next := nextSemVer(latest, level)
+	return next.Original(), nil
 }
 
 func tags(ctx context.Context) ([]string, error) {
