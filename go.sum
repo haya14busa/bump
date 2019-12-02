@@ -1,0 +1,4 @@
+github.com/Masterminds/semver v1.5.0 h1:H65muMkzWKEuNDnfl9d70GUjFniHKHRbFPGBuZ3QEww=
+github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF078ddwwvV3Y=
+github.com/haya14busa/go-versionsort v0.0.0-20190326014014-5b3a40d6070a h1:C75TMjl9nVoJt0B2KcbO6qESAF3lG4vVYgDXoxotWrg=
+github.com/haya14busa/go-versionsort v0.0.0-20190326014014-5b3a40d6070a/go.mod h1:LUfyxWIo5I3AzeZxF5+/wAUM5sz5ZibEh/Ck3dZrN50=
