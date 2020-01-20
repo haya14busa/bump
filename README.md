@@ -1,6 +1,7 @@
 # bump
 
 [![Go status](https://github.com/haya14busa/bump/workflows/Go/badge.svg)](https://github.com/haya14busa/bump/actions)
+[![release](https://github.com/haya14busa/bump/workflows/release/badge.svg)](https://github.com/haya14busa/bump/actions?query=workflow%3Arelease)
 [![releases](https://img.shields.io/github/release/haya14busa/bump.svg)](https://github.com/haya14busa/bump/releases)
 
 **bump** returns next semantic version tag.

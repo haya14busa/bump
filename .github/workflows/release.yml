@@ -1,22 +1,29 @@
-name: goreleaser
+name: release
 
 on:
   push:
+    branches:
+      - master
     tags:
-      - 'v*'
+      - 'v*.*.*'
 
 jobs:
-  goreleaser:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Set up Go
-        uses: actions/setup-go@master
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v1
         with:
           go-version: 1.13
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
+
+      # Bump version on merging Pull Requests with specific labels.
+      # (bump:major,bump:minor,bump:patch)
+      - id: bumpr
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: haya14busa/action-bumpr@v1
+
+      - uses: goreleaser/goreleaser-action@v1
+        if: "!steps.bumpr.outputs.skip"
         with:
           version: latest
           args: release --rm-dist
