@@ -66,7 +66,7 @@ func nextTag(tags []string, level Level) (string, error) {
 }
 
 func tags(ctx context.Context) ([]string, error) {
-	cmd := exec.CommandContext(ctx, "git", "tag")
+	cmd := exec.CommandContext(ctx, "git", "tag", "--merged")
 	b, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("failed to run `git tag`: %v", err)
