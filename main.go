@@ -21,6 +21,7 @@ const (
 	PATCH Level = iota
 	MINOR
 	MAJOR
+	CURRENT // Do not bump and show the latest version.
 )
 
 func main() {
@@ -33,6 +34,7 @@ func main() {
 func usage() {
 	fmt.Fprintln(os.Stderr, `Usage:	bump [major,minor,patch (default=patch)]
 bump returns next semantic version tag`)
+	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "https://github.com/haya14busa/bump")
 	os.Exit(2)
 }
@@ -48,7 +50,8 @@ func run(w io.Writer) error {
 	if len(tags) == 0 {
 		return errors.New("existing tag not found")
 	}
-	next, err := nextTag(tags, bumpLevel(flag.Args()))
+	latest := latestSemVer(tags)
+	next, err := nextTag(latest, bumpLevel(flag.Args()))
 	if err != nil {
 		return err
 	}
@@ -56,12 +59,12 @@ func run(w io.Writer) error {
 	return nil
 }
 
-func nextTag(tags []string, level Level) (string, error) {
-	latest, err := semver.NewVersion(latestSemVer(tags))
+func nextTag(latest string, level Level) (string, error) {
+	latestVer, err := semver.NewVersion(latest)
 	if err != nil {
 		return "", err
 	}
-	next := nextSemVer(latest, level)
+	next := nextSemVer(latestVer, level)
 	return next.Original(), nil
 }
 
@@ -95,6 +98,9 @@ func nextSemVer(v *semver.Version, level Level) semver.Version {
 		return v.IncMinor()
 	case MAJOR:
 		return v.IncMajor()
+	case CURRENT:
+		// Do nothing.
+		return *v
 	}
 	log.Fatalf("unknown level: %v", level)
 	return v.IncPatch()
@@ -111,6 +117,8 @@ func bumpLevel(args []string) Level {
 		return MINOR
 	case "major":
 		return MAJOR
+	case "current":
+		return CURRENT
 	}
 	return PATCH
 }
